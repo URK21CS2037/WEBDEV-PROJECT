@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .btn-delete {
+            background-color: red;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .btn-delete:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personal Expense Tracker</h1>
+        <form id="expenseForm">
+            <input type="text" id="description" placeholder="Expense Description" required>
+            <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+            <input type="date" id="date" required>
+            <select id="category">
+                <option value="">Select Category</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Other">Other</option>
+            </select>
+            <button type="submit">Add Expense</button>
+        </form>
+        <table id="expenseTable">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const date = document.getElementById('date').value;
+            const category = document.getElementById('category').value;
+
+            if (description && amount && date && category) {
+                addExpense(description, amount, date, category);
+                this.reset();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        function addExpense(description, amount, date, category) {
+            const table = document.getElementById('expenseTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            newRow.innerHTML = `
+                <td>${description}</td>
+                <td>$${amount.toFixed(2)}</td>
+                <td>${date}</td>
+                <td>${category}</td>
+                <td><button class="btn-delete" onclick="deleteExpense(this)">Delete</button></td>
+            `;
+        }
+
+        function deleteExpense(button) {
+            const row = button.parentElement.parentElement;
+            row.parentElement.removeChild(row);
+        }
+    </script>
+</body>
+</html>
